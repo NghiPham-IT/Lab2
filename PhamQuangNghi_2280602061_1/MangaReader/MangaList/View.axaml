@@ -7,12 +7,16 @@
         mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="250"
         Width="600" Height="800"
         x:Class="MangaReader.MangaList.View"
-        Title="MangaReader">
+
+        Title="View">
         <Panel>
+            <TextBox x:Name="FilterTextBox" Width="200" Height="30" />
+
             <ProgressBar Name="LoadingProgressBar" IsIndeterminate="True" 
                          HorizontalAlignment="Center" IsVisible="False"/>
             <vc:ErrorPanel Name="NewErrorPanel" IsVisible="False"/> 
             <DockPanel Name="MainContent">
+
                 
                 <Grid ColumnDefinitions="*, Auto" DockPanel.Dock="Top">
                     <TextBox Grid.Column="0" Margin="10" Name="MyTextBox" KeyDown="OnkeyDown">
@@ -29,6 +33,7 @@
                             HorizontalAlignment="Center">
                     <Label Name="TotalMangaNumberLabel" VerticalAlignment="Center" 
                            FontWeight="Bold" Content="123 mangas"/>
+
 
                         <Button Name="FirstButton" Click="FirstButton_OnClick">&lt;&lt;</Button>
                         <Button Name="PrevButton" Click="PrevButton_OnClick">&lt; Prev</Button>

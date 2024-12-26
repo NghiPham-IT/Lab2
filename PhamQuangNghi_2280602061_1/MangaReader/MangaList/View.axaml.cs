@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
+
+using System.Reflection.Metadata.Ecma335;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -9,26 +10,32 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+
 using MangaReader.DomainCommon;
+
 
 namespace MangaReader.MangaList;
 
 public partial class View : Window, IView
 {
         private readonly Presenter? presenter;
+
         private readonly Http? http;
         private readonly List<ItemControl> itemControls = new();
     
+
         public View()
         {
             InitializeComponent();
         }
+
 
         public View(string baseUrl, Http http):this()
         {
             this.http = http;
             var domain = new Domain(baseUrl, http);
             presenter = new Presenter(domain, this);
+
             this.NewErrorPanel.RetryButton1.Click += (sender, args) => this.presenter?.Load();
         }
 
@@ -41,6 +48,7 @@ public partial class View : Window, IView
         {
             this.NewErrorPanel.IsVisible = value;
         }
+
         public void SetMainContentVisible(bool value)
         {
             this.MainContent.IsVisible = value;
@@ -78,6 +86,7 @@ public partial class View : Window, IView
         
         public void SetListBoxContent(IEnumerable<Item> items)
         {
+
             
             this.MangaListBox.Items.Clear();
             foreach (var itemControl in itemControls)
@@ -85,11 +94,13 @@ public partial class View : Window, IView
                 ViewCommon.Utils.DisposeImageSource(itemControl.CoverImage);
             }
             itemControls.Clear();
+
             foreach (var item in items)
             {
                 var itemControl = new ItemControl();
                 itemControl.TitleTextBlock.Text = item.Title;
                 itemControl.ChapterNumberTextBlock.Text = item.ChapterNumber;
+
 
                 ToolTip.SetTip(itemControl.CoverBorder, item.ToolTip);
                 itemControls.Add(itemControl);
@@ -140,10 +151,7 @@ public partial class View : Window, IView
         {
             this.NewErrorPanel.MessageTextBlock.Text = text;
         }
-        public string? GetFilterText()
-        {
-            return this.MyTextBox.Text;
-        }
+
         public void OpenMangaDetail(string mangaUrl)
         {
             // Console.WriteLine(mangaUrl);
@@ -151,6 +159,7 @@ public partial class View : Window, IView
             window.Show(owner: this);
 
         }
+
 
     private void FirstButton_OnClick(object? sender, RoutedEventArgs e)
     {
@@ -189,15 +198,33 @@ public partial class View : Window, IView
     }
 
 
+
     private void MyListBox_onDoubleTapped(object? sender, TappedEventArgs e)
     {
         // Console.WriteLine("selected: " + this.MangaListBox.SelectedIndex);
         presenter?.SelectManga(this.MangaListBox.SelectedIndex);
+    
     }
+    public string? GetFilterText()
+    {
+        return SearchTextBox.Text;
+    }
+
+    public void ClearButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        SearchTextBox.Text = string.Empty;
+    }
+
+    public void ApplyButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        presenter?.ApplyFilter();
+    }
+
     private void MyListBox_OnKeyUp(object? sender, KeyEventArgs e)
     {
         if (e.Key == Key.Enter)
         {
+
             // Console.WriteLine("selected: " + this.MangaListBox.SelectedIndex);
             presenter?.SelectManga(this.MangaListBox.SelectedIndex);
 
@@ -221,6 +248,7 @@ public partial class View : Window, IView
         if (e.Key == Key.Enter)
         {
             presenter?.ApplyFilter();
+
         }
     }
 }
