@@ -5,18 +5,20 @@
              mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="250"
              x:Class="MangaReader.ViewCommon.ErrorPanel">
     <DockPanel Margin="20">
-        <Button Name="RetryButton1"
+        <Button Name="RetryButton1" Margin="0 20 0 0"
                 HorizontalAlignment="Stretch" 
                 HorizontalContentAlignment="Center"
                 DockPanel.Dock="Bottom">
             Retry
         </Button> 
-        <TextBlock Name="MessageTextBlock"
-                   Foreground="Red" 
-                   FontSize="70"
-                   FontFamily="Courier"
-                   TextWrapping="Wrap">
-            Oops! Something went wrong.
-        </TextBlock>
+        <ScrollViewer>
+            <TextBlock Name="MessageTextBlock"
+                       Foreground="Red"
+                       FontSize="70"
+                       FontFamily="Courier"
+                       TextWrapping="Wrap">
+                Oops! Something went wrong.
+            </TextBlock>
+        </ScrollViewer>
     </DockPanel>
 </UserControl>

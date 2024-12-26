@@ -31,7 +31,7 @@ namespace MangaReader.DomainCommon
             }
         }
 
-        public Task<byte[]> GetByteArrayAsync(string url)
+        public Task<byte[]> GetByteAsync(string url)
         {
             return GetByteAsync(url, CancellationToken.None);
         }
@@ -40,8 +40,9 @@ namespace MangaReader.DomainCommon
         {
             try
             {
-                using var message = await client.GetAsync(url, token);
-                return await message.Content.ReadAsByteArrayAsync(token);
+                // using var message = await client.GetAsync(url, token);
+                // return await message.Content.ReadAsByteArrayAsync(token);
+                return await client.GetByteArrayAsync(url, token);
             }
             catch (HttpRequestException ex)
             {

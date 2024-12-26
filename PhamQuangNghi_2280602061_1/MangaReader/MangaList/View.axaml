@@ -7,20 +7,29 @@
         mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="250"
         Width="600" Height="800"
         x:Class="MangaReader.MangaList.View"
-        Title="View">
+        Title="MangaReader">
         <Panel>
-            <TextBox x:Name="FilterTextBox" Width="200" Height="30" />
-
             <ProgressBar Name="LoadingProgressBar" IsIndeterminate="True" 
                          HorizontalAlignment="Center" IsVisible="False"/>
             <vc:ErrorPanel Name="NewErrorPanel" IsVisible="False"/> 
             <DockPanel Name="MainContent">
-                <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="10" Spacing="5">
-                    <Button Name="ClearButton" Content="Clear" Click="ClearButton_OnClick" Width="60"/>
-                    <Button Name="ApplyButton" Content="Apply" Click="ApplyButton_OnClick" Width="60"/>
-                </StackPanel>
-                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="10" Margin="10" HorizontalAlignment="Center">
-                        <Label Name="TotalMangaNumberLabel" VerticalAlignment="Center" FontWeight="Bold" Content="123 mangas"/>
+                
+                <Grid ColumnDefinitions="*, Auto" DockPanel.Dock="Top">
+                    <TextBox Grid.Column="0" Margin="10" Name="MyTextBox" KeyDown="OnkeyDown">
+
+                        <TextBox.InnerRightContent>
+                            <Button Name="MyClearButtom" Click="MyClearButtom_OnClick">Clear</Button>
+                        </TextBox.InnerRightContent>
+                    </TextBox>
+                    <Button Grid.Column="1" Name="MyApplyButton" Click="MyApplyButton_OnClick" Margin="0 0 10 0">
+                        Apply
+                    </Button></Grid>
+                
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="10" Margin="10"
+                            HorizontalAlignment="Center">
+                    <Label Name="TotalMangaNumberLabel" VerticalAlignment="Center" 
+                           FontWeight="Bold" Content="123 mangas"/>
+
                         <Button Name="FirstButton" Click="FirstButton_OnClick">&lt;&lt;</Button>
                         <Button Name="PrevButton" Click="PrevButton_OnClick">&lt; Prev</Button>
                         <Button Name="CurrentPageButton" Background="DarkOrange" Foreground="Black" >

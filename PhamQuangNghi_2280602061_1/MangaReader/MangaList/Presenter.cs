@@ -16,10 +16,13 @@ public class Presenter
     private int currentPageIndex = 1;
     private int totalPageNumber = 0;
     private bool isLoading;
+    private MangaList? list;
+
 
     public Presenter(Domain domain, IView view)
     {
         this.domain = domain;
+        if (this.view != null) return;
         this.view = view;
         this.Load();
     }
@@ -62,7 +65,10 @@ public class Presenter
         view.SetNumericUpDownMaximum(list.TotalPageNumber);
         view.SetLastButtonAndNextButtonEnabled(currentPageIndex < list.TotalPageNumber);
         view.SetListBoxContent(
-            list.CurrentPage.Select(manga =>new Item (manga.Title, manga.LastChapter, manga.Description    
+            list.CurrentPage.Select(manga =>new Item (
+                manga.Title,
+                manga.LastChapter + " chapters",
+                manga.Description    
             ))
         );
         view.SetMainContentVisible(true);
@@ -84,19 +90,21 @@ public class Presenter
                 {
                     await task;
                 }
-                catch(OperationCanceledException){}
-
+                catch (OperationCanceledException )
+                {
+                    task = null;
+                }
                 task = null;
             }
             cts = null;
-        }
-        MangaList? list = null;
+        } 
+        list = null;
         string? errorMessage = null;
         try
         {
             list = await domain.LoadMangaList(currentPageIndex, view.GetFilterText() ?? "");
         }
-        catch (NetworkException ex)
+        catch (NetworkException ex) 
         {
             errorMessage = "Network error: " + ex.Message;
         }
@@ -140,7 +148,7 @@ public class Presenter
                 bytes = null;
             }
             if(token.IsCancellationRequested) break;
-            view?.SetCover(index, bytes);
+            view.SetCover(index, bytes);
         }
     }
 
@@ -148,7 +156,7 @@ public class Presenter
     {
         if(isLoading || currentPageIndex >= totalPageNumber) return;
         currentPageIndex++;
-        view?.SetNumericUpDownValue(currentPageIndex);
+        view.SetNumericUpDownValue(currentPageIndex);
         this.Load();
     }
 
@@ -156,7 +164,7 @@ public class Presenter
     {
         if (isLoading || currentPageIndex <= 1) return;
         currentPageIndex--;
-        view?.SetNumericUpDownValue(currentPageIndex);
+        view.SetNumericUpDownValue(currentPageIndex);
         this.Load();
     }
 
@@ -164,21 +172,29 @@ public class Presenter
     {
         if( isLoading || currentPageIndex <=1) return;
         currentPageIndex = 1;
-        view?.SetNumericUpDownValue(currentPageIndex);
+        view.SetNumericUpDownValue(currentPageIndex);
         this.Load();
     }
+    public void SelectManga(int index)
+    {
+        if (list == null) return;
+        if (index < 0 || index >= list.CurrentPage.Count) return;
+        var mangaUrl = list.CurrentPage[index].MangaUrl;
+        view.OpenMangaDetail(mangaUrl);
+    }   
+
 
     public void GoLastPage()
     {
         if(isLoading || currentPageIndex >= totalPageNumber) return;
         currentPageIndex = totalPageNumber;
-        view?.SetNumericUpDownValue(currentPageIndex);
+        view.SetNumericUpDownValue(currentPageIndex);
         this.Load();
     }
 
     public void GoSpecificPage()
     {
-        if(isLoading || view == null)  return;
+        if(isLoading)  return;
         view.HideFlyout();
         var pageIndex = view.GetNumericUpDownValue();
         if(pageIndex < 1 || pageIndex > totalPageNumber) return;

@@ -4,15 +4,16 @@ namespace MangaReader.MangaList;
 
 public class Item
 {
-    public Item(string title, string lastChapter, string description)
+    public string Title { get; init; } = null!;
+    public string ChapterNumber { get; init; } = null!;
+    public string Description { get; init; } = null!;
+
+    public Item(string title, string chapterNumber, string description)
     {
         Title = title;
-        LastChapter = lastChapter;
+        ChapterNumber = chapterNumber;
         Description = description;
     }
-    public string Title { get; }
-    public string LastChapter { get; }
-    public string Description { get; }
     public string ToolTip => this.Title+" - " + this.Description;
 
 }
@@ -40,5 +41,7 @@ public interface IView
 
     void SetErrorMessage(string text);
     string? GetFilterText();
+    void OpenMangaDetail(string mangaUrl);
+
 
 }
