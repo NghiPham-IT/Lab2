@@ -57,7 +57,8 @@ public partial class View : Window, IView
     }
     public void ShowChapter(string chapterUrl)
     {
-        Console.WriteLine(chapterUrl);
+        this.SetMainPanelChild(new
+            ChapterDetail.View(chapterUrl, http!));
     }
 
 
@@ -79,7 +80,7 @@ public partial class View : Window, IView
 
         //this.MainPanel.Child = 
             this.ShowOverview(manga.Title, manga.Chapters.Count, manga.Description, manga.CoverUrl);
-        this.Title = manga.Title;
+            this.Title = manga.Title;
     }
     private void SetMainPanelChild(Control control)
     {

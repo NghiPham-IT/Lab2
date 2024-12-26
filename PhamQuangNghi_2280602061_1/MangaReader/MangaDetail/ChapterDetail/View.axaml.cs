@@ -86,16 +86,12 @@ public partial class View : UserControl, IView, IDisposable
             border.Background = errorBackground;
         }
     }
+    
 
     public double GetPageViewortWidth()
     {
-        throw new NotImplementedException();
+        return this.ScrollViewer.Bounds.Width;
     }
-
-    public double GetPageViewportWidth()
-        {
-            return this.ScrollViewer.Bounds.Width;
-        }
 
         public void SetPagePanelWidth(double value)
         {
